@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Birthday Countdown by Swapnaja</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  </head>
+  <body>
+    <section class="backgroundBody">
+      <section class="container">
+        <form id="signIn" class="form">
+          <h4 class="formTitle">Sign-In</h4>
+
+          <div id="emailLogin" class="formInputGroup">
+            <label for="signIn-email">Email: </label>
+            <input
+              type="email"
+              class="formInput"
+              autofocus
+              placeholder="Enter Email"
+              id="signIn-email"
+              name="signIn-email"
+            />
+          </div>
+
+          <div id="passwordLogin" class="formInputGroup">
+            <label for="signIn-password">Password: </label>
+            <input
+              type="password"
+              class="formInput"
+              autofocus
+              placeholder="Enter Password"
+              id="signIn-password"
+              name="signIn-password"
+            />
+          </div>
+
+          <div>
+            <button type="submit" class="formButton" id="signIn-btn">
+              Sign In
+            </button>
+          </div>
+
+          <p class="formText">
+            <a class="formLink" id="linkCreateAccount"
+              >Don't have an account? Create account</a
+            >
+          </p>
+        </form>
+
+        <form id="signUp" class="form form--hidden">
+          <h4 id="newUserRegister" class="formTitle">Register/Sign-Up</h4>
+
+          <div id="UserNameSignUp" class="formInputGroup">
+            <label for="fName">First Name: </label>
+            <input
+              type="text"
+              class="formInput"
+              autofocus
+              placeholder="Enter your First Name"
+              id="fName"
+              name="fName"
+            />
+
+            <label for="lName">Last Name: </label>
+            <input
+              type="text"
+              class="formInput"
+              autofocus
+              placeholder="Enter your Last Name"
+              id="lName"
+              name="lName"
+            />
+          </div>
+
+          <div id="dateSignUp" class="formInputGroup">
+            <label for="birthDate">Date of Birth: </label>
+            <input
+              type="date"
+              class="formInput"
+              id="birthDate"
+              name="birthDate"
+            />
+          </div>
+
+          <div id="emailSignUp" class="formInputGroup">
+            <label for="signup-email">Email: </label>
+            <input
+              type="email"
+              class="formInput"
+              autofocus
+              placeholder="Enter your Email"
+              id="signup-email"
+              name="signup-email"
+            />
+          </div>
+
+          <div id="passwordSignUp" class="formInputGroup">
+            <label for="signup-password">Password: </label>
+            <input
+              type="password"
+              class="formInput"
+              autofocus
+              placeholder="Create Password"
+              id="signup-password"
+              name="signup-password"
+            />
+          </div>
+
+          <div>
+            <button type="submit" class="formButton" id="signup-btn">
+              Sign Up
+            </button>
+          </div>
+
+          <p class="formText">
+            <a class="formLink" id="linkLogin"
+              >Already have an account? Sign in</a
+            >
+          </p>
+        </form>
+      </section>
+    </section>
+
+    <section class="container-fluid" id="afterLogin">
+      <div class="row" id="innerPage">
+        <div class="col-md-10"><h1 id="welcomeMessage">Welcome</h1></div>
+        <div class="col-md-2">
+          <button
+            type="submit"
+            class="formButton"
+            id="signOut-btn"
+            href="./index.html"
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+      <div class="row" id="greetingContainer">
+        <div class="card card--hidden col-12" id="isBirthday">
+          <h3 id="birthdayGreeting"></h3>
+          <img
+            id="birthdayGIF"
+            src="https://www.happybirthdaymsg.com/wp-content/uploads/2016/01/happy-birthday-image-34.jpg"
+            alt="Happy Birthday greeting card"
+          />
+          <p id="randomQuoteText"></p>
+          <p id="randomQuoteAuthor"></p>
+        </div>
+
+        <div class="card card--hidden col-12" id="notBirthday">
+          <h1 id="daysLeft"></h1>
+          <p id="justText"></p>
+        </div>
+      </div>
+    </section>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
