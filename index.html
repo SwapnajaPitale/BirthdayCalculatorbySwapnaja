@@ -16,9 +16,10 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   </head>
-  <body>
+  
+  <body onload="loadPage()">
     <section class="backgroundBody">
-      <section class="container">
+      <section class="container" id="formContainer">
         <form id="signIn" class="form">
           <h4 class="formTitle">Sign-In</h4>
 
@@ -133,7 +134,7 @@
       </section>
     </section>
 
-    <section class="container-fluid" id="afterLogin">
+    <section id="afterLogin" class="afterLogin--hidden">
       <div class="row" id="innerPage">
         <div class="col-md-10"><h1 id="welcomeMessage">Welcome</h1></div>
         <div class="col-md-2">
@@ -141,7 +142,6 @@
             type="submit"
             class="formButton"
             id="signOut-btn"
-            href="./index.html"
           >
             Sign Out
           </button>

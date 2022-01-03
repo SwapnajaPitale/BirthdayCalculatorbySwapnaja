@@ -16,6 +16,8 @@ const auth = firebase.auth();
 // Global variables
 const linkCreateAccount = document.querySelector("#linkCreateAccount");
 const linkLogin = document.querySelector("#linkLogin");
+const loginForm = document.querySelector("#signIn");
+const signupForm = document.querySelector("#signUp")
 const firstName = document.getElementById("fName");
 const lastName = document.getElementById("lName");
 const dateOfBirth = document.getElementById("birthDate");
@@ -30,9 +32,7 @@ const signoutBtn = document.getElementById("signOut-btn");
 
 
 // Toggle between Login Form and Sign-up Form
-document.addEventListener("DOMContentLoaded", () => {
-  const loginForm = document.querySelector("#signIn");
-  const signupForm = document.querySelector("#signUp");
+const toggleForm = function() {
 
   if (linkCreateAccount != null) {
     document
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
       signupForm.classList.add("form--hidden");
     });
   }
-});
+};
 
 // Sign Up functionality
 if (signupBtn !== null) {
@@ -70,9 +70,7 @@ if (signupBtn !== null) {
       .then((userCredential) => {
         let user = userCredential.user.email;
         console.log("User created: ", user);
-        alert(
-          "New User Created. Please sign in with your email and password combination now"
-        );
+       
         // Save input data as Realtime Database key:value pairs
         let newUser = {
           FirstName: fNameInput,
@@ -80,14 +78,24 @@ if (signupBtn !== null) {
           Birthdate: birthdateInput,
           Email: emailInput,
         };
+        //Reset sign-up form 
+        signupForm.reset();
+
         // postToFirebase(obj);
         postToFirebaseUserDefinedId(newUser);
+
+        //Sign-in functionality on new user signup
+        console.log("User logged in: ", user);
+        document.getElementById("afterLogin").style.display = "block";
+        displayGreetings(); //calls the displayGreetings function
       })
       .catch((error) => {
         console.log(error);
         alert(error);
       });
+
   });
+    
 }
 
 //User Defined UID
@@ -111,8 +119,13 @@ if (signinBtn !== null) {
       .then((userCredential) => {
         let user = userCredential.user.email;
         console.log("User logged in: ", user);
+
+        //Reset sign-up form 
+        loginForm.reset();
+
+        //Opens after login overlay and calls the displayGreetings function
         document.getElementById("afterLogin").style.display = "block";
-        displayGreetings(); //calls the displayGreetings function
+        displayGreetings(); 
       })
       .catch((error) => {
         console.log(error);
@@ -133,6 +146,9 @@ if (signoutBtn !== null) {
         document.getElementById("afterLogin").style.display = "none";
         document.getElementById("isBirthday").classList.add("card--hidden");
         document.getElementById("notBirthday").classList.add("card--hidden");
+        document.getElementById("formContainer").classList.remove("container--hidden");
+        loginForm.classList.remove("form--hidden"); 
+        toggleForm();
       })
       .catch((error) => {
         console.log(error);
@@ -140,15 +156,6 @@ if (signoutBtn !== null) {
       });
   });
 }
-
-// Checks if current user is active or inactive
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    console.log("State: Active");
-  } else {
-    console.log("State: Inactive");
-  }
-});
 
 
 // Fun starts here
@@ -262,13 +269,22 @@ async function displayGreetings() {
           ).innerHTML = `Happy Birthday, ${currentUserName}!`;
         } else {
           console.log(`${daysToBirthday} DAYS LEFT`);
-          console.log("UNTIL YOUR BIRTHDAY!");
           document
             .getElementById("notBirthday")
             .classList.remove("card--hidden");
-          document.getElementById(
-            "daysLeft"
-          ).innerHTML = `${daysToBirthday} DAYS LEFT`;
+            if(daysToBirthday === 1){
+              document.getElementById(
+                "daysLeft"
+              ).innerHTML = `ONLY ${daysToBirthday} DAY LEFT`;
+            } else if(daysToBirthday <10){
+              document.getElementById(
+                "daysLeft"
+              ).innerHTML = `ONLY ${daysToBirthday} DAYS LEFT`;
+              } else {
+              document.getElementById(
+                "daysLeft"
+              ).innerHTML = `${daysToBirthday} DAYS LEFT`;
+            }         
           document.getElementById("justText").innerHTML =
             "UNTIL YOUR BIRTHDAY!";
         }
@@ -279,4 +295,25 @@ async function displayGreetings() {
     .catch((err) => {
       console.log("Error: ", err);
     });
+};
+
+function loadPage(){
+  // Checks if current user is active or inactive
+  auth.onAuthStateChanged((user) => {
+    if (user !== null) {
+      console.log("State: Active"); //If user is not null, then state is Active
+      console.log(user);
+      if (linkCreateAccount != null) {
+        loginForm.classList.add("form--hidden");
+          };
+      if (linkLogin != null) {
+          signupForm.classList.add("form--hidden");
+         };
+      document.getElementById('formContainer').classList.add('container--hidden');
+      document.getElementById('afterLogin').classList.remove('afterLogin--hidden');
+      displayGreetings();
+    } else {
+      console.log("State: Inactive");
+    }
+});
 }
