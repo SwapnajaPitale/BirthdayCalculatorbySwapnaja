@@ -166,6 +166,7 @@ function checkBirthday(dateOfBirth) {
 
   let today = new Date();
   let currentYear = today.getFullYear();
+  let nextLeapYear = currentYear + (4 - (currentYear - 2000) % 4);
 
   let birthday = new Date(dateOfBirth);
   let birthDate = birthday.getDate();
@@ -173,28 +174,46 @@ function checkBirthday(dateOfBirth) {
   let birthYear = birthday.getFullYear();
 
   let constructedBirthday = new Date();
+  constructedBirthday.setFullYear(birthYear);
   constructedBirthday.setDate(birthDate);
   constructedBirthday.setMonth(birthMonth);
-  constructedBirthday.setFullYear(birthYear);
-
-  let nextBirthday = new Date(constructedBirthday).setFullYear(currentYear);
-
-  const diffDays = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
-
-  if (diffDays === 0) {
-    daysLeftForBirthday = 0;
-  } else if (diffDays < 0) {
-    nextBirthday = new Date(constructedBirthday.setFullYear(currentYear + 1));
-    const newDiffDays = Math.ceil(
-      (nextBirthday - today) / (1000 * 60 * 60 * 24)
-    );
-    daysLeftForBirthday = newDiffDays;
-  } else {
-    daysLeftForBirthday = diffDays;
-  }
 
   console.log(constructedBirthday);
-  console.log(nextBirthday);
+
+  let nextBirthday = new Date(constructedBirthday).setFullYear(currentYear);
+  const diffDays = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+
+  // Check if current user's birthday falls on 29 Feb
+  if (birthMonth === 1 && birthDate===29){
+    let nextLeapBirthday = new Date(constructedBirthday).setFullYear(nextLeapYear);
+    const diffLeapDays = Math.ceil((nextLeapBirthday - today) / (1000 * 60 * 60 * 24))-1;
+    if (currentYear%4 === 0){
+      if (diffDays === 0) {
+        daysLeftForBirthday = 0;
+      } else if (diffDays < 0) {
+        daysLeftForBirthday = diffLeapDays;
+      } else {
+        daysLeftForBirthday = diffDays;
+      }
+    } else{
+      daysLeftForBirthday = diffLeapDays;
+    };
+    console.log(new Date(nextLeapBirthday));
+  } else{
+    // For all other users with non-leap-year-birthday
+      if (diffDays === 0) {
+        daysLeftForBirthday = 0;
+      } else if (diffDays < 0) {
+        nextBirthday = new Date(constructedBirthday.setFullYear(currentYear + 1));
+        const newDiffDays = Math.ceil(
+          (nextBirthday - today) / (1000 * 60 * 60 * 24)
+        );
+        daysLeftForBirthday = newDiffDays;
+      } else {
+        daysLeftForBirthday = diffDays;
+      };
+      console.log(new Date(nextBirthday));
+  }
 
   return daysLeftForBirthday;
 }
@@ -313,7 +332,9 @@ function loadPage(){
       document.getElementById('afterLogin').classList.remove('afterLogin--hidden');
       displayGreetings();
     } else {
-      console.log("State: Inactive");
+      console.log("State: Inactive"); //If user is null, then state is Inactive
+      loginForm.classList.remove("form--hidden"); 
+      toggleForm();
     }
 });
 }
